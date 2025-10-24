@@ -1,4 +1,3 @@
-import cv2
 import numpy as np
 
 """
@@ -124,9 +123,24 @@ class BackgroundSubtract:
         """
         Applies a 3x3 mean filter to specified array.
         """
-        kernel = np.ones((window, window), np.float64) / (window*window)
-        img = cv2.filter2D(img, -1, kernel)
-        return img
+        # Pure NumPy box blur using integral image, with reflect padding
+        # to mimic OpenCV's default border behavior for linear filters.
+        if window is None or window < 1:
+            return img
+        # enforce odd window size (centered kernel)
+        if window % 2 == 0:
+            window += 1
+        pad = window // 2
+
+        # pad and compute integral image
+        p = np.pad(img, ((pad, pad), (pad, pad)), mode='reflect').astype(np.float32)
+        s = p.cumsum(axis=0).cumsum(axis=1)
+
+        # sum over each window via summed area table
+        # out[y, x] = sum of p[y:y+window, x:x+window]
+        out = s[window:, window:] - s[:-window, window:] - s[window:, :-window] + s[:-window, :-window]
+        out /= (window * window)
+        return np.clip(out, 0, 255).astype(np.uint8)
 
     def _rolling_ball_float_background(self, float_img, invert, ball):
         shrink = ball.shrink_factor > 1

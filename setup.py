@@ -9,7 +9,7 @@ with open('README.md') as f:
 setup(
     name='opencv-rolling-ball',
     packages=find_packages(),
-    version='1.0.1',
+    version='1.1.0',
     description='Now function returns both result image and subtracted background',
 	long_description=long_description,
     long_description_content_type='text/markdown',
@@ -17,9 +17,8 @@ setup(
     author='Maksym Balatsko',
     author_email='mbalatsko@gmail.com',
     url='https://github.com/mbalatsko/opencv-rolling-ball',
-    download_url='https://github.com/mbalatsko/opencv-rolling-ball/archive/1.0.1.tar.gz',
+    download_url='https://github.com/mbalatsko/opencv-rolling-ball/archive/1.1.0.tar.gz',
     install_requires=[
-          'opencv-python',
           'numpy'
       ],
     keywords=['opencv', 'background subtraction', 'rolling ball algorithm'],

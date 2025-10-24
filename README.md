@@ -1,7 +1,7 @@
 # Rolling ball and sliding paraboloid background subtraction algorithms 
 
 [![PyPI version](https://badge.fury.io/py/opencv-rolling-ball.svg)](https://badge.fury.io/py/opencv-rolling-ball)
-[![Downloads](https://pepy.tech/badge/opencv-rolling-ball)](https://pepy.tech/project/pypylon-opencv-viewer)
+[![Downloads](https://pepy.tech/badge/opencv-rolling-ball)](https://pepy.tech/project/opencv-rolling-ball)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
@@ -28,12 +28,26 @@ pip install opencv-rolling-ball
 ## Usage
 
 ```python
-import cv2
+# Ejemplo A: usando PIL (Pillow)
+from PIL import Image
+import numpy as np
 from cv2_rolling_ball import subtract_background_rolling_ball
 
-img = cv2.imread(f'path/to/img.tif', 0)
-img, background = subtract_background_rolling_ball(img, 30, light_background=True,
-                                     use_paraboloid=False, do_presmooth=True)
+img = np.array(Image.open('path/to/img.tif').convert('L'))  # uint8 2D
+img, background = subtract_background_rolling_ball(
+    img, 30, light_background=True, use_paraboloid=False, do_presmooth=True
+)
+
+# Ejemplo B: usando un array NumPy ya existente
+# (cualquier método que te entregue un array uint8 2D es válido:
+# imageio, tifffile, OpenSlide, capturas de cámara, etc.)
+import numpy as np
+from cv2_rolling_ball import subtract_background_rolling_ball
+
+img = np.asarray(your_uint8_grayscale_array)  # shape (H, W), dtype uint8
+img, background = subtract_background_rolling_ball(
+    img, 30, light_background=True, use_paraboloid=False, do_presmooth=True
+)
 ```
 
 ## Example outputs
